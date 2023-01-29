@@ -1,5 +1,9 @@
 package services.uniFinder.v1;
 
+import org.json.JSONException;
+
+import java.io.IOException;
+
 import static io.grpc.MethodDescriptor.generateFullMethodName;
 
 /**
@@ -97,7 +101,7 @@ public final class UniFinderServiceGrpc {
     /**
      */
     public void getUniFinderInfo(services.uniFinder.v1.UniFinder.UniFinderRequest request,
-        io.grpc.stub.StreamObserver<services.uniFinder.v1.UniFinder.UniFinderResponse> responseObserver) {
+        io.grpc.stub.StreamObserver<services.uniFinder.v1.UniFinder.UniFinderResponse> responseObserver) throws JSONException, IOException, InterruptedException {
       io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getGetUniFinderInfoMethod(), responseObserver);
     }
 
@@ -202,8 +206,16 @@ public final class UniFinderServiceGrpc {
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
         case METHODID_GET_UNI_FINDER_INFO:
-          serviceImpl.getUniFinderInfo((services.uniFinder.v1.UniFinder.UniFinderRequest) request,
-              (io.grpc.stub.StreamObserver<services.uniFinder.v1.UniFinder.UniFinderResponse>) responseObserver);
+          try {
+            serviceImpl.getUniFinderInfo((UniFinder.UniFinderRequest) request,
+                (io.grpc.stub.StreamObserver<UniFinder.UniFinderResponse>) responseObserver);
+          } catch (JSONException e) {
+            throw new RuntimeException(e);
+          } catch (IOException e) {
+            throw new RuntimeException(e);
+          } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+          }
           break;
         default:
           throw new AssertionError();
