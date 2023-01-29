@@ -1,11 +1,11 @@
 package services.uniFinder.v1;
 
-public class Act_record {
+public class SatRecord {
     int critical_reading;
     int writing;
     int math;
 
-    public Act_record(int critical_reading, int writing, int math) {
+    public SatRecord(int critical_reading, int writing, int math) {
         this.critical_reading = critical_reading;
         this.writing = writing;
         this.math = math;

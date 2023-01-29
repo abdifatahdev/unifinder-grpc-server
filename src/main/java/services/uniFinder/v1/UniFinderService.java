@@ -11,7 +11,6 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import io.grpc.stub.StreamObserver;
 
 public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplBase {
     private final String  apiKey = "QVt5P61BxWdzDPdPwZH0xHUifcy041RmiMU4YNIh";
@@ -25,7 +24,7 @@ public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplB
                 .setInstitutionName("Harvard University")
                 .build();
 
-        getAdmissionInfo(request.getInstitutionId());
+        System.out.println( getAdmissionInfo(request.getInstitutionId()));;
 
 
 
@@ -49,7 +48,7 @@ public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplB
         responseObserver.onCompleted();
     }
 
-    private void getAdmissionInfo(int institutionId) throws IOException, InterruptedException, JSONException {
+    private Record getAdmissionInfo(int institutionId) throws IOException, InterruptedException, JSONException {
 
         String scoreCardApi = "https://api.data.gov/ed/collegescorecard/v1/schools.json?id="+ institutionId + "&_fields=latest.admissions&keys_nested=true&api_key=" + apiKey;
 
@@ -67,36 +66,27 @@ public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplB
         JSONObject latest = arr1.getJSONObject("latest");
         JSONObject admissions = latest.getJSONObject("admissions");
 
+        //SAT SCORES
         JSONObject sat_score = admissions.getJSONObject("sat_scores");
-
         JSONObject per25th = sat_score.getJSONObject("25th_percentile");
         System.out.println(per25th);
+        int sat_critical_reading = per25th.getInt("critical_reading");
+        int sat_writing =  per25th.getInt("writing");
+        int sat_math = per25th.getInt("math");
+        SatRecord satRecord = new SatRecord(sat_critical_reading, sat_writing, sat_math);
+        // ACT SCORES
+        JSONObject act_scores = admissions.getJSONObject("act_scores");
+        JSONObject act_per25th = act_scores.getJSONObject("25th_percentile");
+        System.out.println(per25th);
+        int english = act_per25th.getInt("english");
+        int writing =  act_per25th.getInt("writing");
+        int math = act_per25th.getInt("math");
 
-        int critical_reading = per25th.getInt("critical_reading");
-        int writing =  per25th.getInt("writing");
-        int math = per25th.getInt("math");
-
-        Act_record actRecord = new Act_record(critical_reading, writing, math);
+        ActRecord actRecord = new ActRecord(english, writing, math);
         System.out.println( actRecord.toString());;
+        Record record = new Record(satRecord, actRecord);
+        return record;
 
-
-
-
-
-
-
-
-//        JSONObject act_scores = admissions.getJSONObject("act-scores");
-//        System.out.println(admissions);
-//        JSONObject sat_score = admission.getJSONObject("sat_scores");
-
-//        JSONObject sat_score = admission.getJSONObject("admissions");
-//        JSONObject per75th =  sat_score.getJSONObject("25th_percentile");
-//        int reading = 0;
-//        int math = 0;
-//        int writing =0 ;
-//
-//        System.out.println(sat_score);
     }
 
     private JSONObject getUniversityDetails(String universityId)
