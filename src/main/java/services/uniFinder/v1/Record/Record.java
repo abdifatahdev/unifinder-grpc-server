@@ -1,4 +1,4 @@
-package services.uniFinder.v1;
+package services.uniFinder.v1.Record;
 
 public class Record {
     private SatRecord satRecord;

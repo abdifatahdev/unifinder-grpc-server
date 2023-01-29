@@ -11,6 +11,9 @@ import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import services.uniFinder.v1.Record.ActRecord;
+import services.uniFinder.v1.Record.Record;
+import services.uniFinder.v1.Record.SatRecord;
 
 public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplBase {
     private final String  apiKey = "QVt5P61BxWdzDPdPwZH0xHUifcy041RmiMU4YNIh";
@@ -51,7 +54,6 @@ public class UniFinderService extends UniFinderServiceGrpc.UniFinderServiceImplB
     private Record getAdmissionInfo(int institutionId) throws IOException, InterruptedException, JSONException {
 
         String scoreCardApi = "https://api.data.gov/ed/collegescorecard/v1/schools.json?id="+ institutionId + "&_fields=latest.admissions&keys_nested=true&api_key=" + apiKey;
-
 
         HttpRequest httpRequest = HttpRequest.newBuilder()
                 .uri(URI.create(scoreCardApi))
